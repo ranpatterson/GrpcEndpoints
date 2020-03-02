@@ -30,23 +30,7 @@ namespace GrpcEndpoints
                 app.UseDeveloperExceptionPage();
             }
 
-            //only serve .proto files
-            var provider = new FileExtensionContentTypeProvider();
-            provider.Mappings.Clear();
-            provider.Mappings[".proto"] = "text/plain";
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "Protos")),
-                RequestPath = "/proto",
-                ContentTypeProvider = provider
-
-            });
-
-            app.UseDirectoryBrowser(new DirectoryBrowserOptions
-            {
-                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "Protos")),
-                RequestPath = "/proto"
-            });
+            app.UseGrpcEndpoint(enableDirectoryBrowser:true);
 
             app.UseRouting();
 
